@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HTTP request from WASM in php-wasm</title>
+    <script type="module">
+        // Based on examples from php-wasm's README and docs
+        const { PhpWeb } = await import('https://cdn.jsdelivr.net/npm/php-wasm/PhpWeb.mjs');
+        const php = new PhpWeb;
+
+        php.addEventListener('output', (event) => {
+            console.log(event.detail[0]);
+        });
+
+        php.addEventListener('ready', () => {
+            php.run(`
+<?php
+$url = 'https://httpbin.org/anything';
+
+$window = new Vrzno();
+$window->fetch($url)
+->then(function($res) { return $res->text(); })
+->then(function($txt) { echo($txt); });
+`);
+        });
+    </script>
+</head>
+
+<body>
+<h2>HTTP Request from inside WASM using php-wasm</h2>
+
+<p>This example uses <a href="https://github.com/seanmorris/php-wasm/">php-wasm</a>.</p>
+
+<p>See the output in browser developer console.</p>
+
+<p>Actual code:</p>
+<pre>
+
+$url = 'https://httpbin.org/anything';
+
+$window = new Vrzno();
+$window->fetch($url)
+->then(function($res) { return $res->text(); })
+->then(function($txt) { echo($txt); });
+
+</pre>
+<section>
+    <h4>Info</h4>
+    <ul>
+        <li><a href="https://github.com/wasm-outbound-http-examples/php/tree/main/browser-and-node-php-wasm">Demo source code</a></li>
+        <li>Versions used on the moment of build:<small>
+            php-wasm: <a href="https://github.com/seanmorris/php-wasm/tree/v0.0.8">v0.0.8</a>.
+        </small></li>
+    </ul>
+</section>
+<footer><small>Created for (wannabe-awesome) <a href="https://github.com/vasilev/HTTP-request-from-inside-WASM">list</a></small></footer>
+</body>
+
+</html>
